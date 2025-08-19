@@ -5,12 +5,17 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import TicketsList from '@/components/tickets/TicketsList'
 import CreateTicketModal from '@/components/tickets/CreateTicketModal'
+import EditTicketModal from '@/components/tickets/EditTicketModal'
+import DeleteTicketModal from '@/components/tickets/DeleteTicketModal'
 import { Ticket } from '@/types/ticket'
 
 export default function TicketsPage() {
   const { user, loading } = useAuth()
   const router = useRouter()
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null)
   const [ticketsListKey, setTicketsListKey] = useState(0)
 
   useEffect(() => {
@@ -29,7 +34,27 @@ export default function TicketsPage() {
     setIsCreateModalOpen(true)
   }
 
+  const handleEditTicket = (ticket: Ticket) => {
+    setSelectedTicket(ticket)
+    setIsEditModalOpen(true)
+  }
+
+  const handleDeleteTicket = (ticket: Ticket) => {
+    setSelectedTicket(ticket)
+    setIsDeleteModalOpen(true)
+  }
+
   const handleCreateSuccess = () => {
+    // チケット一覧を再読み込み
+    setTicketsListKey(prev => prev + 1)
+  }
+
+  const handleEditSuccess = () => {
+    // チケット一覧を再読み込み
+    setTicketsListKey(prev => prev + 1)
+  }
+
+  const handleDeleteSuccess = () => {
     // チケット一覧を再読み込み
     setTicketsListKey(prev => prev + 1)
   }
@@ -73,13 +98,40 @@ export default function TicketsPage() {
         </div>
 
         {/* チケット一覧 */}
-        <TicketsList key={ticketsListKey} onTicketClick={handleTicketClick} />
+        <TicketsList 
+          key={ticketsListKey} 
+          onTicketClick={handleTicketClick}
+          onTicketEdit={handleEditTicket}
+          onTicketDelete={handleDeleteTicket}
+        />
 
         {/* チケット作成モーダル */}
         <CreateTicketModal
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
           onSuccess={handleCreateSuccess}
+        />
+
+        {/* チケット編集モーダル */}
+        <EditTicketModal
+          isOpen={isEditModalOpen}
+          ticket={selectedTicket}
+          onClose={() => {
+            setIsEditModalOpen(false)
+            setSelectedTicket(null)
+          }}
+          onSuccess={handleEditSuccess}
+        />
+
+        {/* チケット削除モーダル */}
+        <DeleteTicketModal
+          isOpen={isDeleteModalOpen}
+          ticket={selectedTicket}
+          onClose={() => {
+            setIsDeleteModalOpen(false)
+            setSelectedTicket(null)
+          }}
+          onSuccess={handleDeleteSuccess}
         />
       </div>
     </div>

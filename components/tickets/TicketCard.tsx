@@ -1,20 +1,42 @@
 'use client'
 
 import { Ticket, TICKET_STATUS_LABELS, TICKET_PRIORITY_LABELS, TICKET_STATUS_COLORS, TICKET_PRIORITY_COLORS } from '@/types/ticket'
+import { useAuth } from '@/lib/auth-context'
 import { formatDistanceToNow } from 'date-fns'
 import { ja } from 'date-fns/locale'
 
 interface TicketCardProps {
   ticket: Ticket
   onClick?: (ticket: Ticket) => void
+  onEdit?: (ticket: Ticket) => void
+  onDelete?: (ticket: Ticket) => void
 }
 
-export default function TicketCard({ ticket, onClick }: TicketCardProps) {
+export default function TicketCard({ ticket, onClick, onEdit, onDelete }: TicketCardProps) {
+  const { user } = useAuth()
+  
   const handleClick = () => {
     if (onClick) {
       onClick(ticket)
     }
   }
+
+  const handleTitleClick = (e: React.MouseEvent) => {
+    e.stopPropagation() // カード全体のクリックイベントを防ぐ
+    if (onEdit) {
+      onEdit(ticket)
+    }
+  }
+
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation() // カード全体のクリックイベントを防ぐ
+    if (onDelete) {
+      onDelete(ticket)
+    }
+  }
+
+  // 現在のユーザーがチケットの作成者かどうかをチェック
+  const isCreator = user?.id === ticket.created_by
 
   const formatDate = (dateString: string) => {
     return formatDistanceToNow(new Date(dateString), { 
@@ -36,7 +58,13 @@ export default function TicketCard({ ticket, onClick }: TicketCardProps) {
       {/* ヘッダー */}
       <div className="flex items-start justify-between mb-3">
         <div className="flex-1 min-w-0">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white truncate">
+          <h3 
+            className={`text-lg font-semibold text-gray-900 dark:text-white truncate ${
+              onEdit ? 'cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200' : ''
+            }`}
+            onClick={onEdit ? handleTitleClick : undefined}
+            title={onEdit ? 'クリックして編集' : undefined}
+          >
             {ticket.title}
           </h3>
           {ticket.description && (
@@ -54,6 +82,18 @@ export default function TicketCard({ ticket, onClick }: TicketCardProps) {
           <span className={`px-2 py-1 rounded-full text-xs font-medium ${TICKET_STATUS_COLORS[ticket.status]}`}>
             {TICKET_STATUS_LABELS[ticket.status]}
           </span>
+          {/* 削除ボタン（作成者のみ表示） */}
+          {isCreator && onDelete && (
+            <button
+              onClick={handleDelete}
+              className="p-1 text-gray-400 hover:text-red-600 dark:hover:text-red-400 rounded transition-colors duration-200"
+              title="削除"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
+          )}
         </div>
       </div>
 
