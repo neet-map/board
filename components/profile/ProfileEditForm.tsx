@@ -16,7 +16,6 @@ export default function ProfileEditForm({ profile, onSave, loading }: ProfileEdi
     display_name: '',
     bio: '',
     avatar_url: '',
-    website: '',
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
@@ -27,7 +26,6 @@ export default function ProfileEditForm({ profile, onSave, loading }: ProfileEdi
         display_name: profile.display_name || '',
         bio: profile.bio || '',
         avatar_url: profile.avatar_url || '',
-        website: profile.website || '',
       })
     }
   }, [profile])
@@ -115,7 +113,7 @@ export default function ProfileEditForm({ profile, onSave, loading }: ProfileEdi
 
         <div>
           <label htmlFor="avatar_url" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            アバターURL
+            アイコン画像URL
           </label>
           <input
             type="url"
@@ -128,20 +126,7 @@ export default function ProfileEditForm({ profile, onSave, loading }: ProfileEdi
           />
         </div>
 
-        <div>
-          <label htmlFor="website" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            ウェブサイト
-          </label>
-          <input
-            type="url"
-            id="website"
-            name="website"
-            value={formData.website}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-800 dark:border-gray-600 dark:text-white"
-            placeholder="https://example.com"
-          />
-        </div>
+
 
         <div className="flex gap-4">
           <button

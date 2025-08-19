@@ -40,12 +40,20 @@ export default function Header() {
             </Link>
             
             {user && (
-              <Link
-                href="/users"
-                className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
-              >
-                メンバー
-              </Link>
+              <>
+                <Link
+                  href="/users"
+                  className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
+                >
+                  メンバー
+                </Link>
+                <Link
+                  href="/tickets"
+                  className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
+                >
+                  チケット
+                </Link>
+              </>
             )}
             
             <div>
