@@ -8,9 +8,11 @@ import TicketFiltersComponent from '@/components/tickets/TicketFilters'
 
 interface TicketsListProps {
   onTicketClick?: (ticket: Ticket) => void
+  onTicketEdit?: (ticket: Ticket) => void
+  onTicketDelete?: (ticket: Ticket) => void
 }
 
-export default function TicketsList({ onTicketClick }: TicketsListProps) {
+export default function TicketsList({ onTicketClick, onTicketEdit, onTicketDelete }: TicketsListProps) {
   const { session, loading: authLoading } = useAuth()
   const [tickets, setTickets] = useState<Ticket[]>([])
   const [loading, setLoading] = useState(false)
@@ -144,6 +146,8 @@ export default function TicketsList({ onTicketClick }: TicketsListProps) {
               key={ticket.id}
               ticket={ticket}
               onClick={onTicketClick}
+              onEdit={onTicketEdit}
+              onDelete={onTicketDelete}
             />
           ))}
         </div>
