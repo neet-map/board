@@ -5,7 +5,7 @@ import { UpdateTicketData } from '@/types/ticket'
 // チケット更新
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // 認証トークンを取得
@@ -28,7 +28,7 @@ export async function PUT(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const ticketId = params.id
+    const { id: ticketId } = await params
     const body: UpdateTicketData = await request.json()
     
     // バリデーション
@@ -120,7 +120,7 @@ export async function PUT(
 // チケット削除
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // 認証トークンを取得
@@ -143,7 +143,7 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const ticketId = params.id
+    const { id: ticketId } = await params
 
     // 既存チケットの確認と権限チェック
     const { data: existingTicket, error: fetchError } = await supabase
