@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "NEET相互扶助計画board",
+  title: "N-Board",
   description: "NEET相互扶助計画のコミュニティボード",
 };
 

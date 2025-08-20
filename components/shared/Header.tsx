@@ -28,7 +28,7 @@ export default function Header() {
             href="/"
             className="text-2xl font-bold text-gray-800 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
           >
-            NEET相互扶助計画board
+            N-Board
           </Link>
           
           <nav className="flex items-center space-x-6">
@@ -42,16 +42,16 @@ export default function Header() {
             {user && (
               <>
                 <Link
-                  href="/users"
-                  className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
-                >
-                  メンバー
-                </Link>
-                <Link
                   href="/tickets"
                   className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
                 >
                   チケット
+                </Link>
+                <Link
+                  href="/users"
+                  className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
+                >
+                  メンバー
                 </Link>
               </>
             )}
